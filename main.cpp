@@ -11,12 +11,14 @@
 using namespace std;
 
 int main(int argc, char * argv[]){
+	// reference class
 	dataOps d;
+	// strings for user inputs
 	string symbol = "";
 	string date;
+	string userInput;
     bool pow = true;
-    string userInput;
-	string content;
+    
     while(pow){
                 cout << "======Main Menu======" << endl;
                 cout << "1. Insert stock symbol" << endl;
@@ -37,20 +39,26 @@ int main(int argc, char * argv[]){
 						}
 						cout << "Enter a stock symbol: " << endl;
 						cin >> symbol;
+						// pull data using cURL
 						string pulled = d.pullStockData(symbol);
+						// write data to text file
 						d.writeStockData(pulled, symbol);
-						d.generateLinkedList(symbol);
+						// use data from file to build a hash table
+						d.generateHash(symbol);
 						break;
 					}
 					case 2:
 					{
 						if(symbol == ""){
+							// step 1 is manditory
 							cout << "No stock info retrieved! Do option (1) before this step!" << endl;
 							break;
 						}
 						cout << "Enter a date [mm/dd/yy]: " << endl;
 						cin >> date;
+						// convert user input to Yahoo's date format
 						int newDate = d.convertDate(date);
+						// use this date to search
 						dataPoint * found = d.findDataPoint(newDate);
 						d.printDataPoint(found, symbol);
 						break;
@@ -58,6 +66,7 @@ int main(int argc, char * argv[]){
 					case 3:
 					{
 						if(symbol == ""){
+							// step 1 is manditory
 							cout << "No stock info retrieved! Do option (1) before this step!" << endl;
 							break;
 						}
@@ -67,6 +76,7 @@ int main(int argc, char * argv[]){
 					case 4:
 					{
 						if(symbol == ""){
+							// step 1 is manditory
 							cout << "No stock info retrieved! Do option (1) before this step!" << endl;
 							break;
 						}

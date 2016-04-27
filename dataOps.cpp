@@ -20,12 +20,14 @@ dataOps::~dataOps(){
 
 string data;
 // http://www.cplusplus.com/forum/unices/45878/
+// avoid errors
 size_t writeCallback(char* buf, size_t size, size_t nmemb, void* up){ 
     for (int c = 0; c<size*nmemb; c++){
         data.push_back(buf[c]);
     }
     return size*nmemb; 
 }
+// stop cURL from automatically outputting all data
 size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
 {
    return size * nmemb;
@@ -36,10 +38,12 @@ string dataOps::pullStockData(string symbol){
 	CURLcode res;
 	string content;
 	curl = curl_easy_init();
+	// insert user input into Yahoo API URL
 	string urlPre = "http://chartapi.finance.yahoo.com/instrument/1.0/";
 	string urlPost = "/chartdata;type=quote;range=2y/csv";
 	string url = urlPre + symbol + urlPost;
 	if(curl){
+		// easy cURL functions for setting options
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &writeCallback);
@@ -61,11 +65,13 @@ void dataOps::writeStockData(string data, string name){
 	newFile << data << endl;
 	newFile.close();
 }
+
 int dataOps::hashSum(int x){
 	int sum = x;
 	sum = sum % 31;
 	return sum;
 }
+
 void dataOps::insertHash(vector <dataPoint *> v){
 	for(int i = 0; i < v.size(); i++){
 		int index = hashSum(v[i]->date);
@@ -83,7 +89,7 @@ void dataOps::insertHash(vector <dataPoint *> v){
 	}
 }
 
-void dataOps::generateLinkedList(string name){
+void dataOps::generateHash(string name){
 	ifstream file;
 	file.open(name + ".txt");
 	string line;
@@ -93,9 +99,12 @@ void dataOps::generateLinkedList(string name){
 	int date;
 	double close, high, low, open, volume;
 	if(file.is_open()){
+		// loop by line
 		while(getline(file,line)){
+			// set up linestream for comma delimited data
 			stringstream lineStream(line);
 			string value;
+			// loop by comma delimiter through line
 			while(getline(lineStream, value, ',')){
 				if(lineNum > 18){
 					if(index == 0){
@@ -125,6 +134,7 @@ void dataOps::generateLinkedList(string name){
 					index = 0;
 				}
 			}
+			// create vector for easy hash table creation
 			if(lineNum > 18){
 				dataPoint * node = new dataPoint(date, close, high, low, open, volume);
 				points.push_back(node);
@@ -135,6 +145,7 @@ void dataOps::generateLinkedList(string name){
 	insertHash(points);
 }
 
+// formatting from [MM/DD/YY] string to [YYYY/MM/DD] int
 int dataOps::convertDate(string date){
 	int result;
 	string newString = "20" + date.substr(6,2) + date.substr(0,2) + date.substr(3,2);
@@ -142,6 +153,7 @@ int dataOps::convertDate(string date){
 	return result;
 }
 
+// search hash table
 dataPoint * dataOps::findDataPoint(int date){
 	int index = hashSum(date);
 	bool found = false;

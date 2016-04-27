@@ -34,7 +34,7 @@ class dataOps {
                 ~dataOps();
                 std::string pullStockData(std::string symbol);
 				void writeStockData(std::string data, std::string name);
-				void generateLinkedList(std::string name);
+				void generateHash(std::string name);
 				void insertHash(std::vector <dataPoint *> points);
 				int convertDate(std::string date);
 				dataPoint * findDataPoint(int date);
