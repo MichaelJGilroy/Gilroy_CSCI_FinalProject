@@ -6,7 +6,9 @@ user if they want to know more about a particular comanies' stock.
 #HOW TO RUN:
 This is designed to be run similar to our CSCI-2270 assignments throughout the year. This program was written and tested only in the VM
 provided by the school, but it should work fine with any system with g++. Compile and run using the following commands:
+
 ~$ g++ main.cpp dataOps.cpp -lcurl -std=c++11
+
 ~$ ./a.out
 
 The "-lcurl" flag is for the cURL library, which is explained in the dependencies section.
