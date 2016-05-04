@@ -5,6 +5,7 @@
 
 
 struct dataPoint{
+		// variables for each type of data that Yahoo Finance provides in their API
 		int date;
 		double closep;
 		double highp;
@@ -45,6 +46,7 @@ class dataOps {
         private:
 				std::vector <dataPoint *> points;
                 int hashSum(int x);
+		// 31 for maximum days in a month
                 int tableSize = 31;
                 dataPoint* hashTable[31];
 	

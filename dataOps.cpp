@@ -7,6 +7,7 @@
 #include <vector>
 using namespace std;
 
+// ctor
 dataOps::dataOps(){
 	// initialize as null to avoid seg faults
 	for(int i = 0; i < 31; i++){
@@ -15,7 +16,7 @@ dataOps::dataOps(){
 }
 
 dataOps::~dataOps(){
-
+	// dtor
 }
 
 string data;
@@ -75,9 +76,11 @@ int dataOps::hashSum(int x){
 void dataOps::insertHash(vector <dataPoint *> v){
 	for(int i = 0; i < v.size(); i++){
 		int index = hashSum(v[i]->date);
+		// if hash table element empty, insert dataPoint
 		if(hashTable[index] == NULL){
 			hashTable[index] = v[i];
 		}
+		// if not empty, add to end of linked list
 		else{
 			dataPoint * current = hashTable[index];
 			while(current->next != NULL){
@@ -94,7 +97,9 @@ void dataOps::generateHash(string name){
 	file.open(name + ".txt");
 	string line;
 	
+	// keep track of line number since first 18 lines don't contain useful data
 	int lineNum = 0;
+	// keep track of comma delimited index
 	int index = 0;
 	int date;
 	double close, high, low, open, volume;
@@ -204,6 +209,7 @@ string dataOps::findAllTimeHighDate(){
 		}
 	}
 	string date = to_string(highest->date);
+	// handle date formatting with substrings
 	string newString = date.substr(4, 2) + "/" + date.substr(6,2) + "/" + date.substr(0,4);
 	return newString;
 }
